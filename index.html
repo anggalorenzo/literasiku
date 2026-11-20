@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PELITA MILLEA - SD Negeri Geger</title>
+  <style>
+    :root {
+      --primary: #14532d;
+      --primary-2: #166534;
+      --primary-soft: #dcfce7;
+      --accent: #d97706;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+    }
+
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.5; }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #fff;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    header h1 { margin: 0; font-size: 1.25rem; letter-spacing: 0.3px; }
+    header p { margin: 4px 0 0; font-size: 0.82rem; opacity: 0.92; }
+
+    .container { max-width: 780px; margin: 16px auto; padding: 0 14px 48px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+      color: var(--primary);
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+
+    label { display: block; font-size: 0.86rem; font-weight: 600; margin: 12px 0 5px; }
+    input[type="text"], input[type="password"], input[type="url"], input[type="file"], select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.94rem;
+      background: #fff;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+
+    .btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.94rem;
+      cursor: pointer;
+    }
+    .btn:hover { background: var(--primary-2); }
+    .btn:disabled { background: #94a3b8; cursor: not-allowed; }
+    .btn-outline {
+      background: #fff;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+      width: auto;
+      padding: 7px 14px;
+      font-size: 0.82rem;
+      margin-top: 6px;
+    }
+    .btn-accent { background: var(--accent); }
+
+    /* Navigasi 4 Sheet Utama */
+    .nav-sheets {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: #fff;
+      padding: 6px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+    .sheet-btn {
+      padding: 10px 4px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+      text-align: center;
+    }
+    .sheet-btn.active { background: var(--primary); color: #fff; }
+
+    .sheet-view { display: none; }
+    .sheet-view.active { display: block; }
+
+    /* Grid Pilih Kelas 1 - 6 */
+    .kelas-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .kelas-box {
+      padding: 16px 10px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: #f8fafc;
+      text-align: center;
+      font-weight: 700;
+      color: var(--primary);
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .kelas-box.selected, .kelas-box:hover {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+    }
+
+    /* Viewer Bacaan */
+    .viewer-box {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .viewer-box iframe { width: 100%; height: 450px; border: none; }
+    .viewer-box img { width: 100%; height: auto; display: block; }
+
+    .hots-box {
+      background: #fffbeb;
+      border-left: 4px solid var(--accent);
+      padding: 10px 14px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 12px;
+      font-size: 0.88rem;
+    }
+
+    /* Checkbox & Kanvas Paraf */
+    .check-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary-soft);
+      border: 1.5px solid var(--primary);
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+    .check-card input { width: 20px; height: 20px; accent-color: var(--primary); }
+    .check-card span { font-weight: 700; color: var(--primary); font-size: 0.9rem; }
+
+    canvas#paraf-canvas {
+      border: 1.5px dashed #64748b;
+      border-radius: 10px;
+      background: #ffffff;
+      width: 100%;
+      height: 130px;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    /* Ruang Diskusi Realtime */
+    .post-guru {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .badge-guru {
+      background: var(--primary);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .komentar-list {
+      margin-top: 10px;
+      padding-left: 12px;
+      border-left: 2px solid #cbd5e1;
+    }
+    .komentar-item {
+      background: #fff;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 0.86rem;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Soal Online */
+    .soal-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+      background: #fafafa;
+    }
+    .pg-item {
+      background: #fff;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 10px;
+    }
+    .pg-item label { font-weight: 400; margin: 6px 0; cursor: pointer; display: flex; gap: 8px; align-items: center; }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📖 PELITA MILLEA — SD NEGERI GEGER</h1>
+  <p>Platform Literasi Mingguan Melalui Elaborasi dengan Orang Tua • Kec. Kedungadem</p>
+</header>
+
+<div class="container">
+
+  <!-- HALAMAN AWAL: LOGIN NAMA SISWA (DROPDOWN) & PASSWORD 1234 -->
+  <div id="login-screen" class="card">
+    <h2>🔐 Masuk Platform Literasi Siswa & Orang Tua</h2>
+    <p style="font-size:0.85rem; color:var(--muted); margin-top:0;">
+      Pilih nama peserta didik sesuai daftar kelas SD Negeri Geger, lalu masukkan kata sandi standar.
+    </p>
+
+    <label>Filter Kelas (Opsional untuk mempermudah pencarian nama)</label>
+    <select id="filter-kelas-login" onchange="renderDropdownSiswa()">
+      <option value="ALL">-- Tampilkan Semua Siswa (48 Siswa) --</option>
+      <option value="1">Kelas 1 (11 Siswa)</option>
+      <option value="2">Kelas 2 (12 Siswa)</option>
+      <option value="3">Kelas 3 (4 Siswa)</option>
+      <option value="4">Kelas 4 (9 Siswa)</option>
+      <option value="5">Kelas 5 (9 Siswa)</option>
+      <option value="6">Kelas 6 (3 Siswa)</option>
+    </select>
+
+    <label>Nama Lengkap Siswa</label>
+    <select id="select-nama-siswa" required></select>
+
+    <label>Password Masuk Siswa</label>
+    <input type="password" id="input-pass-siswa" placeholder="Masukkan password (1234)" />
+
+    <button class="btn" onclick="prosesLoginSiswa()">Masuk ke Halaman Kelas</button>
+  </div>
+
+  <!-- AREA UTAMA SETELAH LOGIN -->
+  <div id="main-app" style="display:none;">
+    <div class="top-bar">
+      <div>
+        👤 <strong id="user-display-name">-</strong> • <span id="user-display-kelas">Kelas -</span>
+      </div>
+      <button class="btn-outline" style="margin:0; padding:4px 10px;" onclick="logoutSiswa()">Keluar</button>
+    </div>
+
+    <!-- PILIHAN KELAS 1 - 6 -->
+    <div class="card" id="pilih-kelas-card">
+      <h2>🏫 Pilih Ruang Kelas (1 – 6)</h2>
+      <div class="kelas-grid">
+        <div class="kelas-box" onclick="pilihKelas('1')" id="kbox-1">Kelas 1</div>
+        <div class="kelas-box" onclick="pilihKelas('2')" id="kbox-2">Kelas 2</div>
+        <div class="kelas-box" onclick="pilihKelas('3')" id="kbox-3">Kelas 3</div>
+        <div class="kelas-box" onclick="pilihKelas('4')" id="kbox-4">Kelas 4</div>
+        <div class="kelas-box" onclick="pilihKelas('5')" id="kbox-5">Kelas 5</div>
+        <div class="kelas-box" onclick="pilihKelas('6')" id="kbox-6">Kelas 6</div>
+      </div>
+    </div>
+
+    <!-- NAVIGASI 4 SHEET -->
+    <div class="nav-sheets">
+      <button class="sheet-btn active" onclick="bukaSheet('sheet1', this)">1. Bacaan & Ortu</button>
+      <button class="sheet-btn" onclick="bukaSheet('sheet2', this)">2. Ruang Diskusi</button>
+      <button class="sheet-btn" onclick="bukaSheet('sheet3', this)">3. Panel Guru</button>
+      <button class="sheet-btn" onclick="bukaSheet('sheet4', this)">4. Latihan Soal</button>
+    </div>
+
+    <!-- =========================================================
+         SHEET 1: BAHAN BACAAN PER KELAS + PARAF & SARAN ORANG TUA
+         ========================================================= -->
+    <div id="sheet1" class="sheet-view active">
+      <div class="card">
+        <h2>📚 Bahan Bacaan Mingguan — Kelas <span class="label-kelas-aktif">1</span></h2>
+        <div id="judul-bacaan" style="font-weight:700; font-size:1.05rem; margin-bottom:10px;">Memuat bacaan...</div>
+        <div id="viewer-bacaan" class="viewer-box">
+          <p style="color:var(--muted);">Belum ada bacaan untuk kelas ini.</p>
+        </div>
+        <div id="box-pemantik" class="hots-box" style="display:none;">
+          <strong>💡 Pertanyaan Pemantik Diskusi (HOTS):</strong>
+          <div id="isi-pemantik" style="margin-top:4px;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>✍️ Konfirmasi, Paraf & Saran Orang Tua</h2>
+        <form id="form-konfirmasi-ortu">
+          <label class="check-card">
+            <input type="checkbox" id="cek-sudah-baca" required />
+            <span>✅ Saya menyatakan ananda telah membaca bahan bacaan minggu ini dengan pendampingan orang tua</span>
+          </label>
+
+          <label>Paraf Digital Orang Tua / Wali Murid (Goreskan pada kotak di bawah)</label>
+          <canvas id="paraf-canvas" width="500" height="130"></canvas>
+          <button type="button" class="btn-outline" onclick="hapusParaf()">Ulangi Paraf</button>
+
+          <label>Saran / Catatan Pendampingan Orang Tua</label>
+          <textarea id="catatan-ortu" rows="3" placeholder="Tuliskan respon anak saat membaca, kosakata baru, atau saran untuk guru..." required></textarea>
+
+          <button type="submit" class="btn" id="btn-kirim-respon">Kirim Konfirmasi & Paraf</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         SHEET 2: CATATAN HASIL DISKUSI & RUANG KOMENTAR REALTIME
+         ========================================================= -->
+    <div id="sheet2" class="sheet-view">
+      <div class="card">
+        <h2>💬 Forum Diskusi & Umpan Balik Realtime — Kelas <span class="label-kelas-aktif">1</span></h2>
+        <p style="font-size:0.84rem; color:var(--muted); margin-top:0;">
+          Pernyataan pemantik dari guru dan tanggapan/diskusi orang tua murid tampil secara langsung untuk seluruh warga kelas.
+        </p>
+
+        <!-- Form Posting Pernyataan Baru (Guru maupun Orang Tua) -->
+        <div style="background:#f8fafc; padding:12px; border-radius:10px; border:1px solid var(--border); margin-bottom:16px;">
+          <label style="margin-top:0;">Kirim Pernyataan / Topik Diskusi Baru Sebagai:</label>
+          <select id="peran-diskusi">
+            <option value="Orang Tua">Orang Tua / Wali Murid</option>
+            <option value="Guru">Guru Kelas (Perlu PIN 5678)</option>
+          </select>
+          <input type="password" id="pin-diskusi-guru" placeholder="Masukkan PIN Guru (5678) jika posting sebagai Guru" style="display:none; margin-top:8px;" />
+          <textarea id="teks-diskusi-baru" rows="2" placeholder="Tulis pernyataan hasil diskusi Sabtu atau tanggapan..." style="margin-top:8px;"></textarea>
+          <button type="button" class="btn" style="margin-top:8px;" onclick="kirimPostDiskusi('')">Posting ke Ruang Diskusi</button>
+        </div>
+
+        <div id="wadah-diskusi-realtime">Memuat percakapan...</div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         SHEET 3: PANEL GURU (PASSWORD 5678, PILIH KELAS 1-6, UPLOAD & SOAL)
+         ========================================================= -->
+    <div id="sheet3" class="sheet-view">
+      <div id="guru-auth-box" class="card">
+        <h2>🔐 Autentikasi Panel Guru SD Negeri Geger</h2>
+        <label>Masukkan Password Guru</label>
+        <input type="password" id="input-pass-guru" placeholder="Masukkan password guru (5678)" />
+        <button class="btn" onclick="loginGuru()">Buka Panel Guru</button>
+      </div>
+
+      <div id="guru-workspace" style="display:none;">
+        <div class="card">
+          <h2>🎯 Kelola Kelas Tujuan (Kelas 1 – 6)</h2>
+          <label>Pilih Kelas yang Akan Dikelola:</label>
+          <select id="guru-select-kelas" onchange="pilihKelas(this.value)">
+            <option value="1">Kelas 1</option>
+            <option value="2">Kelas 2</option>
+            <option value="3">Kelas 3</option>
+            <option value="4">Kelas 4</option>
+            <option value="5">Kelas 5</option>
+            <option value="6">Kelas 6</option>
+          </select>
+        </div>
+
+        <!-- 3A. Upload Bahan Bacaan PDF / JPG -->
+        <div class="card">
+          <h2>📤 1. Upload Bahan Bacaan Mingguan (PDF / JPG)</h2>
+          <form id="form-guru-materi">
+            <label>Judul Bahan Bacaan</label>
+            <input type="text" id="guru-judul-bacaan" placeholder="Contoh: Pekan 4 - Legenda Asal Usul Bojonegoro" required />
+
+            <label>Pertanyaan Pemantik Diskusi (HOTS - Opsional)</label>
+            <textarea id="guru-pemantik-hots" rows="2" placeholder="Tuliskan 3-5 pertanyaan pemantik diskusi hari Sabtu..."></textarea>
+
+            <label>Pilih File Bacaan (PDF atau Gambar JPG/PNG)</label>
+            <input type="file" id="guru-file-bacaan" accept=".pdf,image/jpeg,image/png,image/jpg" required />
+
+            <button type="submit" class="btn" id="btn-guru-upload">Unggah Bahan Bacaan ke Kelas</button>
+          </form>
+        </div>
+
+        <!-- 3B. Buat / Upload Soal Pilihan Ganda (Generate / GForm / PDF) -->
+        <div class="card">
+          <h2>📝 2. Buat atau Upload Soal Evaluasi (Tampil di Sheet 4)</h2>
+          <label>Judul Paket Soal</label>
+          <input type="text" id="guru-judul-soal" placeholder="Contoh: Kuis Pemahaman Bacaan Pekan 4" />
+
+          <label>Metode Penyediaan Soal</label>
+          <select id="guru-metode-soal" onchange="ubahFormSoalGuru()">
+            <option value="PG_ONLINE">Generate Soal Pilihan Ganda Langsung di Web (Online)</option>
+            <option value="GFORM">Sematkan Link Google Form (Online)</option>
+            <option value="PDF">Upload Lembar Soal PDF (Bisa Dikerjakan Online / Cetak Offline)</option>
+          </select>
+
+          <!-- Opsi 1: Generate PG Langsung -->
+          <div id="box-soal-pg" style="margin-top:10px; background:#f8fafc; padding:12px; border-radius:10px; border:1px solid var(--border);">
+            <p style="font-size:0.82rem; color:var(--muted); margin-top:0;">
+              Format cepat generator soal: tulis pertanyaan dan opsi A, B, C, D lalu klik <strong>+ Tambah Butir Soal</strong>.
+            </p>
+            <input type="text" id="pg-tanya" placeholder="Tulis pertanyaan..." />
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
+              <input type="text" id="pg-a" placeholder="Opsi A" />
+              <input type="text" id="pg-b" placeholder="Opsi B" />
+              <input type="text" id="pg-c" placeholder="Opsi C" />
+              <input type="text" id="pg-d" placeholder="Opsi D" />
+            </div>
+            <select id="pg-kunci" style="margin-top:6px;">
+              <option value="A">Kunci Jawaban: A</option>
+              <option value="B">Kunci Jawaban: B</option>
+              <option value="C">Kunci Jawaban: C</option>
+              <option value="D">Kunci Jawaban: D</option>
+            </select>
+            <button type="button" class="btn-outline" onclick="tambahButirPG()">+ Tambah Butir Soal ke Daftar</button>
+            <div id="preview-draft-pg" style="margin-top:10px; font-size:0.85rem;"></div>
+          </div>
+
+          <!-- Opsi 2: Google Form -->
+          <div id="box-soal-gform" style="display:none; margin-top:10px;">
+            <label>Tempel Tautan (Link) Google Form</label>
+            <input type="url" id="guru-link-gform" placeholder="https://docs.google.com/forms/d/e/..." />
+          </div>
+
+          <!-- Opsi 3: PDF Soal -->
+          <div id="box-soal-pdf" style="display:none; margin-top:10px;">
+            <label>Upload File PDF Lembar Soal</label>
+            <input type="file" id="guru-file-soal-pdf" accept=".pdf" />
+          </div>
+
+          <button type="button" class="btn btn-accent" id="btn-simpan-soal" onclick="publikasikanSoal()">Terbitkan Soal ke Sheet 4</button>
+        </div>
+
+        <!-- 3C. Penilaian Diskusi Reflektif Sabtu -->
+        <div class="card">
+          <h2>⭐ 3. Rekap Paraf Ortu & Penilaian Diskusi Sabtu (Kelas <span class="label-kelas-aktif">1</span>)</h2>
+          <div id="guru-rekap-siswa">Memuat data siswa...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         SHEET 4: KUMPULAN SOAL ONLINE & OFFLINE PER KELAS
+         ========================================================= -->
+    <div id="sheet4" class="sheet-view">
+      <div class="card">
+        <h2>🎯 Latihan & Evaluasi Pemahaman — Kelas <span class="label-kelas-aktif">1</span></h2>
+        <p style="font-size:0.84rem; color:var(--muted); margin-top:0;">
+          Kerjakan soal pilihan ganda interaktif / Google Form secara langsung di HP, atau unduh lembar PDF untuk dikerjakan secara offline.
+        </p>
+        <div id="wadah-kumpulan-soal">Memuat daftar soal...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // =========================================================================
+  // 1. KONFIGURASI URL APPS SCRIPT & PASSWORD
+  // =========================================================================
+  const SCRIPT_URL = "TEMPEL_URL_WEB_APP_APPS_SCRIPT_ANDA_DISINI";
+  const PASS_SISWA = "1234";
+  const PASS_GURU  = "5678";
+
+  // =========================================================================
+  // 2. DATA 48 SISWA RESMI SD NEGERI GEGER (SUMBER: DATA SISWA BY NAME)
+  // =========================================================================
+  const DATA_SISWA = [
+    // KELAS 1 (10 Siswa)
+    { nama: "ADIVA YASNA UMAIZA", kelas: "1" },
+    { nama: "DINDA DWI NAYLATUL HIDAYAH", kelas: "1" },
+    { nama: "MUHAMMAD ADIB ALFAQIH", kelas: "1" },
+    { nama: "MUHAMMAD AZRIL RAFISQY", kelas: "1" },
+    { nama: "MUHAMMAD RAFKAALFARIZQI WIDODO", kelas: "1" },
+    { nama: "MUHAMMAD ZAKY BAHRUN INI'AM", kelas: "1" },
+    { nama: "NAFIZA NASA SYAKIRA AULIA", kelas: "1" },
+    { nama: "NAYLA SYAFIRA NUR FADHILAH", kelas: "1" },
+    { nama: "RADEVA ARYA WIJAYA", kelas: "1" },
+    { nama: "RADEVA ARYA WIJAYA", kelas: "1" },
+    { nama: "SHOKIBUL KHOIRUL UMAR", kelas: "1" },
+    // KELAS 2 (12 Siswa)
+    { nama: "ABU YAZID AL BUSTOMI", kelas: "2" },
+    { nama: "ALIF NURDIANA PUTRI", kelas: "2" },
+    { nama: "MOHAMMAD LEO RAMADANI", kelas: "2" },
+    { nama: "MUHAMMAD AKBAR NUR DAFFA PRATAMA", kelas: "2" },
+    { nama: "MUHAMMAD ARDANI AFDILLAH", kelas: "2" },
+    { nama: "MUHAMMAD FIKRI ILHAMI", kelas: "2" },
+    { nama: "MUHAMMAD NANDA TRIATMOYULIA PUTRA", kelas: "2" },
+    { nama: "MUTIARA FEBRIANNURROSINTA", kelas: "2" },
+    { nama: "RUMITASARI ANGGRAENI", kelas: "2" },
+    { nama: "TASIROTUZ ZAHRO' DEWI SINTA", kelas: "2" },
+    { nama: "WISNU SETYA PRATAMA", kelas: "2" },
+    { nama: "ZAKA CAHYA PRATAMA", kelas: "2" },
+    // KELAS 3 (4 Siswa)
+    { nama: "ALIYAH AZZURE BELVA", kelas: "3" },
+    { nama: "NUR QUMAIROH AL-MISBAH", kelas: "3" },
+    { nama: "QUENZA BILQIS SHAKILA RAHMALITA", kelas: "3" },
+    { nama: "MOH. SURYA PRATAMA", kelas: "3" },
+    // KELAS 4 (9 Siswa)
+    { nama: "DZAKIYYA VHEYSA AZZAHRA", kelas: "4" },
+    { nama: "AS-SHOFA SEPTY KHAIRA WILDA", kelas: "4" },
+    { nama: "ALEX SANDRA PUTRA JUANZA", kelas: "4" },
+    { nama: "ACHMAD ROYANUL FIRDAUS", kelas: "4" },
+    { nama: "ARJUN DAWAM UBAIDILLAH", kelas: "4" },
+    { nama: "MUHAMMAD SYAHDAN AMRULLAH", kelas: "4" },
+    { nama: "IMELDA SABRINA RAMADHANI", kelas: "4" },
+    { nama: "MOHAMMAD YUSUF EKA SAPUTRA", kelas: "4" },
+    { nama: "MUHAMMAD RASYA FIRDAUS HIBADULLAH", kelas: "4" },
+    // KELAS 5 (9 Siswa)
+    { nama: "ABDI LUQMAN AULIYAK", kelas: "5" },
+    { nama: "AUDEA SILVANA TRIASARI", kelas: "5" },
+    { nama: "AULIYA KHANSA UFAIROH", kelas: "5" },
+    { nama: "SHELVI DWI NURHIDAYAH", kelas: "5" },
+    { nama: "FAZILA AJENG FIRDA WAHYUDI", kelas: "5" },
+    { nama: "MOHAMMAD ALDI PUTRA WIJAYA", kelas: "5" },
+    { nama: "MUHAMMAD ALFIAN NURUL IHSAN", kelas: "5" },
+    { nama: "MUHAMMAD RIO RAMANDIKA", kelas: "5" },
+    { nama: "OKTAKAYSA VIRGO LOVELYANDO", kelas: "5" },
+    // KELAS 6 (3 Siswa)
+    { nama: "ADITYA NAUFAL ABIYYU", kelas: "6" },
+    { nama: "LAILA NURIYATUL KHAFIDHOH", kelas: "6" },
+    { nama: "FACHRY", kelas: "6" }
+  ];
+
+  let currentUser = null;
+  let activeKelas = "1";
+  let serverData = { materiPerKelas: {}, responList: [], diskusiList: [], soalList: [] };
+  let draftSoalPG = [];
+
+  // Render Dropdown Nama Siswa di Halaman Login
+  function renderDropdownSiswa() {
+    const filter = document.getElementById("filter-kelas-login").value;
+    const select = document.getElementById("select-nama-siswa");
+    const filtered = filter === "ALL" ? DATA_SISWA : DATA_SISWA.filter(s => s.kelas === filter);
+
+    select.innerHTML = `<option value="">-- Pilih Nama Siswa (${filtered.length} siswa) --</option>` +
+      filtered.map(s => `<option value="${s.nama}|${s.kelas}">${s.nama} (Kelas ${s.kelas})</option>`).join("");
+  }
+  renderDropdownSiswa();
+
+  // Proses Login Siswa (Password 1234)
+  function prosesLoginSiswa() {
+    const val = document.getElementById("select-nama-siswa").value;
+    const pass = document.getElementById("input-pass-siswa").value;
+
+    if (!val) return alert("Silakan pilih nama siswa terlebih dahulu!");
+    if (pass !== PASS_SISWA) return alert("Password salah! Gunakan password siswa: 1234");
+
+    const [nama, kelas] = val.split("|");
+    currentUser = { nama, kelas };
+
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("main-app").style.display = "block";
+    document.getElementById("user-display-name").innerText = nama;
+    document.getElementById("user-display-kelas").innerText = "Kelas " + kelas;
+
+    pilihKelas(kelas);
+    muatSemuaData();
+  }
+
+  function logoutSiswa() {
+    currentUser = null;
+    document.getElementById("main-app").style.display = "none";
+    document.getElementById("login-screen").style.display = "block";
+    document.getElementById("input-pass-siswa").value = "";
+  }
+
+  // Pilih Ruang Kelas 1 - 6
+  function pilihKelas(kls) {
+    activeKelas = String(kls);
+    document.querySelectorAll(".kelas-box").forEach(el => el.classList.remove("selected"));
+    const box = document.getElementById("kbox-" + activeKelas);
+    if (box) box.classList.add("selected");
+
+    document.querySelectorAll(".label-kelas-aktif").forEach(el => el.innerText = activeKelas);
+    const guruSel = document.getElementById("guru-select-kelas");
+    if (guruSel) guruSel.value = activeKelas;
+
+    renderKontenKelas();
+  }
+
+  // Navigasi 4 Sheet
+  function bukaSheet(sheetId, btnEl) {
+    document.querySelectorAll(".sheet-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".sheet-view").forEach(v => v.classList.remove("active"));
+    btnEl.classList.add("active");
+    document.getElementById(sheetId).classList.add("active");
+  }
+
+  // Ambil Data dari Google Sheets
+  async function muatSemuaData() {
+    if (SCRIPT_URL.includes("TEMPEL_URL")) {
+      document.getElementById("judul-bacaan").innerText = "Mode Offline/Pratinjau (Tempel URL Apps Script untuk sinkronisasi online)";
+      return;
+    }
+    try {
+      const res = await fetch(SCRIPT_URL);
+      serverData = await res.json();
+      renderKontenKelas();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  // Render Semua Tampilan Berdasarkan Kelas Terpilih
+  function renderKontenKelas() {
+    // 1. Render Bahan Bacaan Sheet 1
+    const mat = serverData.materiPerKelas[activeKelas];
+    const viewer = document.getElementById("viewer-bacaan");
+    const boxPemantik = document.getElementById("box-pemantik");
+
+    if (mat) {
+      document.getElementById("judul-bacaan").innerText = `${mat.judul} (Diunggah: ${mat.waktu})`;
+      viewer.innerHTML = mat.tipe === "pdf"
+        ? `<iframe src="${mat.link}"></iframe>`
+        : `<img src="${mat.link}" alt="Bahan Bacaan Kelas ${activeKelas}" />`;
+
+      if (mat.pemantik) {
+        boxPemantik.style.display = "block";
+        document.getElementById("isi-pemantik").innerText = mat.pemantik;
+      } else {
+        boxPemantik.style.display = "none";
+      }
+    } else {
+      document.getElementById("judul-bacaan").innerText = `Belum ada bahan bacaan aktif untuk Kelas ${activeKelas}`;
+      viewer.innerHTML = `<p style="padding:20px; color:#64748b;">Guru kelas belum mengunggah bacaan minggu ini.</p>`;
+      boxPemantik.style.display = "none";
+    }
+
+    // 2. Render Ruang Diskusi Realtime Sheet 2
+    renderDiskusiRealtime();
+
+    // 3. Render Rekap Penilaian Guru Sheet 3
+    renderRekapUntukGuru();
+
+    // 4. Render Kumpulan Soal Sheet 4
+    renderSoalKelas();
+  }
+
+  // =========================================================================
+  // KANVAS PARAF DIGITAL ORANG TUA
+  // =========================================================================
+  const canvas = document.getElementById("paraf-canvas");
+  const ctx = canvas.getContext("2d");
+  let drawing = false;
+  let adaParaf = false;
+
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = "#1e293b";
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * (canvas.width / rect.width),
+      y: (clientY - rect.top) * (canvas.height / rect.height)
+    };
+  }
+
+  canvas.addEventListener("mousedown", e => { drawing = true; adaParaf = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+  canvas.addEventListener("mousemove", e => { if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+  canvas.addEventListener("mouseup", () => drawing = false);
+
+  canvas.addEventListener("touchstart", e => { e.preventDefault(); drawing = true; adaParaf = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+  canvas.addEventListener("touchmove", e => { e.preventDefault(); if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+  canvas.addEventListener("touchend", () => drawing = false);
+
+  function hapusParaf() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    adaParaf = false;
+  }
+
+  // Kirim Konfirmasi & Paraf Orang Tua
+  document.getElementById("form-konfirmasi-ortu").addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!adaParaf) return alert("Mohon bubuhkan paraf orang tua pada kotak yang tersedia.");
+
+    const btn = document.getElementById("btn-kirim-respon");
+    btn.disabled = true;
+    btn.innerText = "Mengirim Laporan...";
+
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "submitResponOrtu",
+        nama: currentUser.nama,
+        kelas: activeKelas,
+        paraf: "Terparaf Digital ✅",
+        catatanOrtu: document.getElementById("catatan-ortu").value
+      })
+    });
+
+    alert("Terima kasih! Konfirmasi baca, paraf, dan catatan orang tua berhasil tersimpan.");
+    document.getElementById("form-konfirmasi-ortu").reset();
+    hapusParaf();
+    btn.disabled = false;
+    btn.innerText = "Kirim Konfirmasi & Paraf";
+    muatSemuaData();
+  });
+
+  // =========================================================================
+  // SHEET 2: FORUM DISKUSI REALTIME (GURU & ORANG TUA)
+  // =========================================================================
+  document.getElementById("peran-diskusi").addEventListener("change", function() {
+    document.getElementById("pin-diskusi-guru").style.display = this.value === "Guru" ? "block" : "none";
+  });
+
+  async function kirimPostDiskusi(indukId) {
+    let pengirim = `Wali dari ${currentUser.nama}`;
+    let peran = "Orang Tua";
+    let pesan = "";
+
+    if (indukId === "") {
+      peran = document.getElementById("peran-diskusi").value;
+      pesan = document.getElementById("teks-diskusi-baru").value.trim();
+      if (peran === "Guru") {
+        if (document.getElementById("pin-diskusi-guru").value !== PASS_GURU) {
+          return alert("Password Guru salah (5678)!");
+        }
+        pengirim = `Guru Kelas ${activeKelas}`;
+      }
+    } else {
+      pesan = document.getElementById("balas-" + indukId).value.trim();
+    }
+
+    if (!pesan) return alert("Tuliskan isi pernyataan atau komentar terlebih dahulu.");
+
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "postDiskusi",
+        kelas: activeKelas,
+        pengirim,
+        peran,
+        pesan,
+        indukId
+      })
+    });
+
+    if (indukId === "") document.getElementById("teks-diskusi-baru").value = "";
+    muatSemuaData();
+  }
+
+  function renderDiskusiRealtime() {
+    const wadah = document.getElementById("wadah-diskusi-realtime");
+    const listKelas = serverData.diskusiList.filter(d => d.kelas === activeKelas);
+    const topikUtama = listKelas.filter(d => !d.indukId).reverse();
+
+    if (topikUtama.length === 0) {
+      wadah.innerHTML = "<p style='color:#64748b;'>Belum ada topik diskusi di kelas ini. Jadilah yang pertama memulai!</p>";
+      return;
+    }
+
+    wadah.innerHTML = topikUtama.map(topik => {
+      const balasan = listKelas.filter(d => d.indukId === topik.id);
+      return `
+        <div class="post-guru">
+          <div class="post-header">
+            <span><strong>${topik.pengirim}</strong> ${topik.peran === 'Guru' ? '<span class="badge-guru">GURU</span>' : ''}</span>
+            <span>${topik.waktu}</span>
+          </div>
+          <div style="font-size:0.95rem;">${topik.pesan}</div>
+
+          <div class="komentar-list">
+            ${balasan.map(b => `
+              <div class="komentar-item">
+                <div style="font-size:0.75rem; color:#64748b;"><strong>${b.pengirim}</strong> • ${b.waktu}</div>
+                <div>${b.pesan}</div>
+              </div>
+            `).join("")}
+
+            <div style="display:flex; gap:6px; margin-top:8px;">
+              <input type="text" id="balas-${topik.id}" placeholder="Tulis komentar balasan..." style="padding:7px 10px; font-size:0.85rem;" />
+              <button type="button" class="btn-outline" style="margin:0;" onclick="kirimPostDiskusi('${topik.id}')">Kirim</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // =========================================================================
+  // SHEET 3: PANEL GURU (PASSWORD 5678)
+  // =========================================================================
+  function loginGuru() {
+    if (document.getElementById("input-pass-guru").value === PASS_GURU) {
+      document.getElementById("guru-auth-box").style.display = "none";
+      document.getElementById("guru-workspace").style.display = "block";
+      renderRekapUntukGuru();
+    } else {
+      alert("Password Guru salah! Masukkan: 5678");
+    }
+  }
+
+  // Upload Bahan Bacaan PDF / JPG oleh Guru
+  document.getElementById("form-guru-materi").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const file = document.getElementById("guru-file-bacaan").files[0];
+    if (!file) return;
+
+    const btn = document.getElementById("btn-guru-upload");
+    btn.disabled = true;
+    btn.innerText = "Mengunggah ke Google Drive...";
+
+    const reader = new FileReader();
+    reader.onload = async function() {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "uploadMateri",
+          kelas: activeKelas,
+          judul: document.getElementById("guru-judul-bacaan").value,
+          pemantik: document.getElementById("guru-pemantik-hots").value,
+          fileName: file.name,
+          mimeType: file.type,
+          fileBase64: reader.result.split(",")[1]
+        })
+      });
+      alert(`Bahan bacaan Kelas ${activeKelas} berhasil diperbarui!`);
+      document.getElementById("form-guru-materi").reset();
+      btn.disabled = false;
+      btn.innerText = "Unggah Bahan Bacaan ke Kelas";
+      muatSemuaData();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Generator & Upload Soal Guru
+  function ubahFormSoalGuru() {
+    const m = document.getElementById("guru-metode-soal").value;
+    document.getElementById("box-soal-pg").style.display = m === "PG_ONLINE" ? "block" : "none";
+    document.getElementById("box-soal-gform").style.display = m === "GFORM" ? "block" : "none";
+    document.getElementById("box-soal-pdf").style.display = m === "PDF" ? "block" : "none";
+  }
+
+  function tambahButirPG() {
+    const tanya = document.getElementById("pg-tanya").value.trim();
+    const a = document.getElementById("pg-a").value.trim();
+    const b = document.getElementById("pg-b").value.trim();
+    const c = document.getElementById("pg-c").value.trim();
+    const d = document.getElementById("pg-d").value.trim();
+    const kunci = document.getElementById("pg-kunci").value;
+
+    if (!tanya || !a || !b) return alert("Lengkapi pertanyaan dan minimal opsi A & B.");
+    draftSoalPG.push({ tanya, a, b, c, d, kunci });
+
+    document.getElementById("pg-tanya").value = "";
+    document.getElementById("pg-a").value = "";
+    document.getElementById("pg-b").value = "";
+    document.getElementById("pg-c").value = "";
+    document.getElementById("pg-d").value = "";
+
+    document.getElementById("preview-draft-pg").innerHTML =
+      `<strong>Daftar Butir Soal Siap Terbit (${draftSoalPG.length} soal):</strong><ol>` +
+      draftSoalPG.map(s => `<li>${s.tanya} (Kunci: ${s.kunci})</li>`).join("") + `</ol>`;
+  }
+
+  async function publikasikanSoal() {
+    const judul = document.getElementById("guru-judul-soal").value.trim();
+    const tipe = document.getElementById("guru-metode-soal").value;
+    if (!judul) return alert("Isi judul paket soal terlebih dahulu!");
+
+    const btn = document.getElementById("btn-simpan-soal");
+    btn.disabled = true;
+    btn.innerText = "Menerbitkan Soal...";
+
+    if (tipe === "PG_ONLINE") {
+      if (draftSoalPG.length === 0) { btn.disabled = false; return alert("Tambahkan minimal 1 butir soal."); }
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "tambahSoal", kelas: activeKelas, judul, tipe, konten: JSON.stringify(draftSoalPG) })
+      });
+      draftSoalPG = [];
+      document.getElementById("preview-draft-pg").innerHTML = "";
+    } else if (tipe === "GFORM") {
+      const link = document.getElementById("guru-link-gform").value.trim();
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "tambahSoal", kelas: activeKelas, judul, tipe, konten: link })
+      });
+    } else if (tipe === "PDF") {
+      const file = document.getElementById("guru-file-soal-pdf").files[0];
+      if (!file) { btn.disabled = false; return alert("Pilih file PDF soal!"); }
+      const reader = new FileReader();
+      reader.onload = async function() {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "tambahSoal", kelas: activeKelas, judul, tipe,
+            fileName: file.name, mimeType: file.type, fileBase64: reader.result.split(",")[1]
+          })
+        });
+        selesaiTerbitSoal(btn);
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+    selesaiTerbitSoal(btn);
+  }
+
+  function selesaiTerbitSoal(btn) {
+    alert(`Paket soal berhasil diterbitkan ke Sheet 4 (Kelas ${activeKelas})!`);
+    document.getElementById("guru-judul-soal").value = "";
+    btn.disabled = false;
+    btn.innerText = "Terbitkan Soal ke Sheet 4";
+    muatSemuaData();
+  }
+
+  function renderRekapUntukGuru() {
+    const wadah = document.getElementById("guru-rekap-siswa");
+    const list = serverData.responList.filter(r => r.kelas === activeKelas);
+    if (list.length === 0) {
+      wadah.innerHTML = "<p style='color:#64748b;'>Belum ada laporan baca masuk untuk kelas ini.</p>";
+      return;
+    }
+    wadah.innerHTML = list.map(r => `
+      <div style="border-bottom:1px solid #e2e8f0; padding:12px 0;">
+        <strong>${r.nama}</strong> • <span style="font-size:0.8rem; color:#64748b;">${r.waktu} (${r.paraf})</span>
+        <div style="background:#f8fafc; padding:8px; border-radius:8px; margin:6px 0; font-size:0.86rem;">
+          Catatan Ortu: "${r.catatanOrtu}"
+        </div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <select id="nilai-diskusi-${r.rowIndex}" style="flex:1;">
+            <option value="Berkembang" ${r.nilaiDiskusi === 'Berkembang' ? 'selected' : ''}>Berkembang</option>
+            <option value="Cakap" ${r.nilaiDiskusi === 'Cakap' ? 'selected' : ''}>Cakap</option>
+            <option value="Mahir" ${r.nilaiDiskusi === 'Mahir' ? 'selected' : ''}>Mahir</option>
+          </select>
+          <input type="text" id="cat-guru-${r.rowIndex}" placeholder="Catatan diskusi Sabtu..." value="${r.catatanGuru === '-' ? '' : r.catatanGuru}" style="flex:2;" />
+          <button type="button" class="btn-outline" style="margin:0;" onclick="simpanNilaiSabtu(${r.rowIndex})">Simpan</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  async function simpanNilaiSabtu(rowIndex) {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "simpanNilaiDiskusi",
+        rowIndex,
+        nilaiDiskusi: document.getElementById(`nilai-diskusi-${rowIndex}`).value,
+        catatanGuru: document.getElementById(`cat-guru-${rowIndex}`).value || "Aktif dalam diskusi reflektif."
+      })
+    });
+    alert("Penilaian diskusi Sabtu berhasil disimpan!");
+    muatSemuaData();
+  }
+
+  // =========================================================================
+  // SHEET 4: KUMPULAN SOAL ONLINE & OFFLINE
+  // =========================================================================
+  function renderSoalKelas() {
+    const wadah = document.getElementById("wadah-kumpulan-soal");
+    const list = serverData.soalList.filter(s => s.kelas === activeKelas);
+
+    if (list.length === 0) {
+      wadah.innerHTML = `<p style="color:#64748b;">Belum ada paket soal untuk Kelas ${activeKelas}.</p>`;
+      return;
+    }
+
+    wadah.innerHTML = list.map((s, idxPaket) => {
+      if (s.tipe === "PG_ONLINE") {
+        const butir = JSON.parse(s.konten);
+        return `
+          <div class="soal-card">
+            <h3>📝 ${s.judul} (Kuis Online Pilihan Ganda)</h3>
+            ${butir.map((b, i) => `
+              <div class="pg-item">
+                <strong>${i + 1}. ${b.tanya}</strong>
+                <label><input type="radio" name="ans-${idxPaket}-${i}" value="A" /> A. ${b.a}</label>
+                <label><input type="radio" name="ans-${idxPaket}-${i}" value="B" /> B. ${b.b}</label>
+                ${b.c ? `<label><input type="radio" name="ans-${idxPaket}-${i}" value="C" /> C. ${b.c}</label>` : ""}
+                ${b.d ? `<label><input type="radio" name="ans-${idxPaket}-${i}" value="D" /> D. ${b.d}</label>` : ""}
+              </div>
+            `).join("")}
+            <button class="btn" onclick='koreksiPG(${idxPaket}, ${JSON.stringify(butir)})'>Kirim & Lihat Skor Otomatis</button>
+            <div id="skor-pg-${idxPaket}" style="margin-top:10px; font-weight:700; color:var(--primary);"></div>
+          </div>
+        `;
+      } else if (s.tipe === "GFORM") {
+        return `
+          <div class="soal-card">
+            <h3>📋 ${s.judul} (Google Form)</h3>
+            <p style="font-size:0.85rem;">Klik tombol di bawah untuk mengerjakan soal secara online melalui Google Form:</p>
+            <a href="${s.konten}" target="_blank" class="btn" style="display:inline-block; text-align:center; text-decoration:none;">Buka & Kerjakan Google Form</a>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="soal-card">
+            <h3>📄 ${s.judul} (Lembar Soal PDF — Online / Cetak Offline)</h3>
+            <div class="viewer-box"><iframe src="${s.konten}"></iframe></div>
+            <a href="${s.konten.replace('/preview', '/view')}" target="_blank" class="btn-outline" style="display:inline-block; text-decoration:none; margin-top:8px;">Unduh / Cetak PDF untuk Offline</a>
+          </div>
+        `;
+      }
+    }).join("");
+  }
+
+  function koreksiPG(idxPaket, butir) {
+    let benar = 0;
+    butir.forEach((b, i) => {
+      const dipilih = document.querySelector(`input[name="ans-${idxPaket}-${i}"]:checked`);
+      if (dipilih && dipilih.value === b.kunci) benar++;
+    });
+    const nilai = Math.round((benar / butir.length) * 100);
+    document.getElementById(`skor-pg-${idxPaket}`).innerText =
+      `Hasil ${currentUser.nama}: Benar ${benar} dari ${butir.length} soal (Skor: ${nilai})`;
+  }
+</script>
+
+</body>
+</html>
